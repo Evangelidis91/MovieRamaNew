@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MovieRamaNew</string>
+    <string name="internet_failure_error">Internet connectivity error</string>
+
 </resources>
