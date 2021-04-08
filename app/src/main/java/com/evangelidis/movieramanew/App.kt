@@ -1,6 +1,7 @@
 package com.evangelidis.movieramanew
 
 import android.app.Application
+import com.evangelidis.movieramanew.databases.databaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -14,7 +15,16 @@ class App : Application() {
         startKoin {
             androidLogger(Level.NONE)
             androidContext(this@App)
-            modules(listOf(retrofitModule, picassoModule, movieModule))
+            modules(
+                listOf(
+                    retrofitModule,
+                    picassoModule,
+                    movieListModule,
+                    movieDetailsModule,
+                    movieCreditsModule,
+                    databaseModule
+                )
+            )
         }
     }
 }

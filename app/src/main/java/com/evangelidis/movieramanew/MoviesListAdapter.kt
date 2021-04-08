@@ -3,6 +3,7 @@ package com.evangelidis.movieramanew
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.evangelidis.movieramanew.databases.WatchlistData
 import com.evangelidis.movieramanew.databinding.ItemMovieBinding
 import com.squareup.picasso.Picasso
 
@@ -15,12 +16,12 @@ class MoviesListAdapter(private var callback: MovieListenerCallback, private val
             notifyDataSetChanged()
         }
 
-//    var watchlistList = mutableListOf<WatchlistData>()
-//        set(value) {
-//            watchlistList.clear()
-//            watchlistList.addAll(value)
-//            notifyDataSetChanged()
-//        }
+    var watchlistList = mutableListOf<WatchlistData>()
+        set(value) {
+            watchlistList.clear()
+            watchlistList.addAll(value)
+            notifyDataSetChanged()
+        }
 
     var newData = mutableListOf<Movie>()
         set(value) {
@@ -35,10 +36,16 @@ class MoviesListAdapter(private var callback: MovieListenerCallback, private val
     override fun getItemCount() = moviesListData.count()
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        holder.bind(moviesListData[position], callback, picasso)
+        holder.bind(moviesListData[position],findIfInWatchlist(position), callback, picasso)
+    }
+
+    private fun findIfInWatchlist(position: Int): Boolean {
+        return watchlistList.find { it.itemId == moviesListData[position].id } != null
     }
 }
 
 interface MovieListenerCallback {
     fun navigateToMovie(movieId: Int)
+    fun insertToWatchlist(watchlistData: WatchlistData)
+    fun removeFromWatchlist(movieId: Int)
 }

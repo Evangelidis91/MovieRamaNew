@@ -2,4 +2,8 @@
     <string name="app_name">MovieRamaNew</string>
     <string name="internet_failure_error">Internet connectivity error</string>
 
+    <string name="hour_format">{hour}h\u0020</string>
+    <string name="minutes_format">{min}min</string>
+
+    <string name="multi_directors">{dir1} and {dir2}</string>
 </resources>

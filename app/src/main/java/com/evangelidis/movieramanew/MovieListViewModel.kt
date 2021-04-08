@@ -8,7 +8,7 @@ import com.evangelidis.movieramanew.Constants.API_KEY
 import com.evangelidis.movieramanew.Constants.LANGUAGE
 import kotlinx.coroutines.launch
 
-class MovieViewModel constructor(private val serviceUtil: TMDBApi) : ViewModel() {
+class MovieListViewModel constructor(private val serviceUtil: TMDBApi) : ViewModel() {
 
     private val _uiState = MutableLiveData<MovieDataState>()
     val uiState: LiveData<MovieDataState> get() = _uiState
@@ -18,6 +18,19 @@ class MovieViewModel constructor(private val serviceUtil: TMDBApi) : ViewModel()
             runCatching {
                 emitUiState(showProgress = true)
                 serviceUtil.getPopularMovies(apiKey = API_KEY, page = pageNumber, language = LANGUAGE)
+            }.onSuccess {
+                emitUiState(movies = Event(it.results))
+            }.onFailure {
+                emitUiState(error = Event(R.string.internet_failure_error))
+            }
+        }
+    }
+
+    fun retrieveSimilarMovieDetails(movieId: Int) {
+        viewModelScope.launch {
+            runCatching {
+                emitUiState(showProgress = true)
+                serviceUtil.getMovieSimilar(movieId, API_KEY, LANGUAGE)
             }.onSuccess {
                 emitUiState(movies = Event(it.results))
             }.onFailure {

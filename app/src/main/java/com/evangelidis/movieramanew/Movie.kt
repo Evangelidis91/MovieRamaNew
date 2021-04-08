@@ -3,13 +3,6 @@ package com.evangelidis.movieramanew
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
-/**
- * Ahsen Saeed}
- * ahsansaeed067@gmail.com}
- * 10/24/19}
- */
-
 @Serializable
 data class MoviesListResponse(
     @SerialName("page") val page: Int?,

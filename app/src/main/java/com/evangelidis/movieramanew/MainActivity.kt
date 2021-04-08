@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.evangelidis.movieramanew.databases.WatchlistData
+import com.evangelidis.movieramanew.databases.WatchlistPresenter
 import com.evangelidis.movieramanew.databinding.ActivityMainBinding
 import com.squareup.picasso.Picasso
 import org.koin.android.ext.android.inject
@@ -14,7 +16,8 @@ class MainActivity : AppCompatActivity(), MovieListenerCallback {
 
     private val picasso: Picasso by inject()
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val movieViewModel: MovieViewModel by viewModel()
+    private val movieViewModel: MovieListViewModel by viewModel()
+    private val databaseViewModel: WatchlistPresenter by viewModel()
     private val moviesListAdapter = MoviesListAdapter(this, picasso)
     private var listOfRetrievedPages = arrayListOf(1)
 
@@ -29,6 +32,13 @@ class MainActivity : AppCompatActivity(), MovieListenerCallback {
 
         observeViewModel()
         setUpScrollListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        databaseViewModel.getAll().observe(this, Observer<List<WatchlistData>>{
+            moviesListAdapter.watchlistList = it as MutableList<WatchlistData>
+        })
     }
 
     private fun observeViewModel() {
@@ -70,5 +80,14 @@ class MainActivity : AppCompatActivity(), MovieListenerCallback {
     }
 
     override fun navigateToMovie(movieId: Int) {
+        startActivity(MovieActivity.createIntent(this, movieId))
+    }
+
+    override fun insertToWatchlist(watchlistData: WatchlistData) {
+        databaseViewModel.insert(watchlistData)
+    }
+
+    override fun removeFromWatchlist(movieId: Int) {
+        databaseViewModel.delete(movieId)
     }
 }

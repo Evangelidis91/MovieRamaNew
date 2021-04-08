@@ -3,4 +3,6 @@
 
     <dimen name="rating_star_large_size">16dp</dimen>
 
+    <dimen name="image_top_radius">6dp</dimen>
+
 </resources>
